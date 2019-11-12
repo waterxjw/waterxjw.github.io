@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>操作系统实验二问题清单</title>
+      <link href="/2019/11/11/shi-yan-er-wen-ti-qing-dan/"/>
+      <url>/2019/11/11/shi-yan-er-wen-ti-qing-dan/</url>
+      
+        <content type="html"><![CDATA[<h1 id="1-实模式与保护模式"><a href="#1-实模式与保护模式" class="headerlink" title="1. 实模式与保护模式"></a>1. 实模式与保护模式</h1><h2 id="实模式"><a href="#实模式" class="headerlink" title="实模式"></a>实模式</h2><p>基址加偏移量就可以直接拿到物理地址的模式</p><p><strong>缺点：</strong>不安全</p><h2 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h2><p>不能直接拿到物理地址，需要进行地址转换，是现代操作系统的主要模式。</p><h2 id="选择子"><a href="#选择子" class="headerlink" title="选择子"></a>选择子</h2><p>放在段选择寄存器里，16位，包含请求特权级，是GDT还是LDT，以及<strong>描述符表中的偏移</strong></p><h2 id="描述符"><a href="#描述符" class="headerlink" title="描述符"></a>描述符</h2><p>描述各种数据段包含<strong>段基址</strong></p><h2 id="GDT"><a href="#GDT" class="headerlink" title="GDT"></a>GDT</h2><p>全局描述符表，全局唯一，存放公用的描述符</p><h2 id="LDT"><a href="#LDT" class="headerlink" title="LDT"></a>LDT</h2><p>局部描述符表，每个进程有一个，存放本进程使用的描述符</p><h2 id="GDTR"><a href="#GDTR" class="headerlink" title="GDTR"></a>GDTR</h2><p>放置GDT首地址，限长</p><h2 id="LDTR"><a href="#LDTR" class="headerlink" title="LDTR"></a>LDTR</h2><p>放置一个特殊的选择子，用于查找当前进程的LDT首地址。</p><h2 id="GDT查找物理地址步骤"><a href="#GDT查找物理地址步骤" class="headerlink" title="GDT查找物理地址步骤"></a>GDT查找物理地址步骤</h2><ol><li>给出段选择子（放在段选择寄存器里）+偏移量</li><li>若选择GDT方式，则从GDTR获取GDT首地址，用段选择子中13位做偏移，拿到描述符</li><li>如果合法且有权限，描述符中段基址加上1中的偏移量，即物理地址</li></ol><h2 id="LDT查找物理地址步骤"><a href="#LDT查找物理地址步骤" class="headerlink" title="LDT查找物理地址步骤"></a>LDT查找物理地址步骤</h2><ol><li>给出段选择子（放在段选择寄存器里）+偏移量</li><li>若选择LDT方式，则从GDTR获取GDT首地址，用LDTR中的偏移量做偏移，拿到GDT中的一个描述符</li><li>从该描述符中获取LDT首地址，用段选择子中的13位做偏移，拿到LDT中的描述符</li><li>如果合法且有权限，将该描述符中的段基址加上1中的偏移量即找到物理地址</li></ol><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上的一些概念和寻址步骤还是有点小绕的。</p><p>跳出细节来说，两种模式都可以说是基址加偏移量，程序代码中的地址均是逻辑地址即偏移量。</p><p>区别在于实模式中在加载进CPU时即进行地址转换，由CPU使用的地址就是物理地址；而保护模式中，CPU使用逻辑地址，地址转换中的这个所谓基址要到描述符表中去找，而这个描述符表是不能有程序随意修改的，是由系统内核统一分配的，比如给每个程序分配不同的一块内存区域。这样就能控制程序所访问的内存空间一定是操作系统分配给自己的。</p><p>而在这个寻址过程中，选择子的作用主要是在描述符表里找到描述符，GDTR、LDTR的作用是找到描述符表的起始位置，而描述符里边就存有基址和界限之类的东西。</p><h1 id="2-FAT12-文件系统"><a href="#2-FAT12-文件系统" class="headerlink" title="2. FAT12 文件系统"></a>2. FAT12 文件系统</h1><ol><li>数据区第一个簇号是2。原因是fat表项要与数据区的簇对应起来。而FAT0号表项与1号表项有特殊用途。0号表项存储分区所在的介质类型，1号表项存储文件系统脏位，表名文件系统存在错误。为了形成映射，数据区就从2号簇开始</li><li>根目录区大小不一定，因为一个目录表项32位，而表项个数是不一定的</li><li>BPB指定字段的含义<ul><li>BPB_BytsPerSec;    //每扇区字节数</li><li>BPB_SecPerClus;    //每簇扇区数</li><li>BPB_RsvdSecCnt;    //Boot记录占用的扇区数</li><li>BPB_NumFATs;    //FAT表个数，默认为2</li><li>BPB_RootEntCnt;    //根目录文件数</li><li>BPB_TotSec16;</li><li>BPB_Media;</li><li>BPB_FATSz16;    //每个FAT占用的扇区数</li><li>BPB_SecPerTrk;</li><li>BPB_NumHeads;</li><li>BPB_HiddSec;</li><li>BPB_TotSec32;    //如果BPB_FATSz16为0，此值为FAT扇区数</li></ul></li></ol><h1 id="3-程序的编译、链接"><a href="#3-程序的编译、链接" class="headerlink" title="3.  程序的编译、链接"></a>3.  程序的编译、链接</h1><h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h2><p>静态链接就是在编译链接时直接将需要的执行代码拷贝到调用处。使用静态链接生成的可执行文件体积较大，包含相同的公共代码，造成浪费。</p><h2 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h2><p>在链接时仅加入描述信息，而程序执行时再从系统中把相应动态库加载到内存中去。</p><h2 id="linux下，ELF可执行文件默认从地址0x080480000开始分配"><a href="#linux下，ELF可执行文件默认从地址0x080480000开始分配" class="headerlink" title="linux下，ELF可执行文件默认从地址0x080480000开始分配"></a>linux下，ELF可执行文件默认从地址0x080480000开始分配</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> 操作系统 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>关于博客</title>
       <link href="/2019/11/11/guan-yu-bo-ke/"/>
       <url>/2019/11/11/guan-yu-bo-ke/</url>

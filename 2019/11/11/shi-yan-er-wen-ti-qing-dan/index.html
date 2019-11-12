@@ -4,8 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="雯雯的垃圾桶">
-    <meta name="description" content="雯雯的垃圾桶">
+    <meta name="keywords" content="操作系统实验二问题清单, 雯雯的垃圾桶">
+    <meta name="description" content="1. 实模式与保护模式实模式基址加偏移量就可以直接拿到物理地址的模式
+缺点：不安全
+保护模式不能直接拿到物理地址，需要进行地址转换，是现代操作系统的主要模式。
+选择子放在段选择寄存器里，16位，包含请求特权级，是GDT还是LDT，以及描述符">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +16,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>雯雯的垃圾桶</title>
+    <title>操作系统实验二问题清单 | 雯雯的垃圾桶</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -281,13 +284,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        
+                        操作系统实验二问题清单
                     </div>
                 </div>
             </div>
@@ -404,6 +407,15 @@
                 </div>
                 <div class="col s5 right-align">
                     
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                操作系统
+                            </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
 
@@ -411,21 +423,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-01-12
+                    2019-11-11
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2019-01-12
+                    2019-11-12
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    30
+                    1k
                 </div>
                 
 
@@ -443,747 +455,52 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <!DOCTYPE html>
-<html>
-<head>
-	<title>五子棋</title>
-	 <meta charset="utf-8">
-</head>
-<body>
-	
-<canvas id="mycanvas" width="600px" height="600px" style="background: #D5B092" onclick="handleClick(event)">
-</canvas>
-<h3 id="prompt">轮到黑方下子 BLACK</h3>
-<h3 id="result"></h3>
-<script type="text/javascript">
-
-		var mycanvas=document.getElementById("mycanvas");
-		var mycontext=mycanvas.getContext("2d");
-		mycontext.beginPath();
-		mycontext.strokeStyle="black";
-		for (var i = 20; i <= 580; i+=40) {
-			mycontext.moveTo(20,i);
-			mycontext.lineTo(580,i);
-			mycontext.stroke();
-			mycontext.moveTo(i,20);
-			mycontext.lineTo(i,580);
-			mycontext.stroke();
-		}
-		mycontext.beginPath();
-		mycontext.arc(calCoord(3,3)[0],calCoord(3,3)[1],5,0,Math.PI*2,true);
-		mycontext.fill();
-		mycontext.beginPath();
-		mycontext.arc(calCoord(3,11)[0],calCoord(3,11)[1],5,0,Math.PI*2,true);
-		mycontext.fill();
-		mycontext.beginPath();
-		mycontext.arc(calCoord(11,3)[0],calCoord(11,3)[1],5,0,Math.PI*2,true);
-		mycontext.fill();
-		mycontext.beginPath();
-		mycontext.arc(calCoord(11,11)[0],calCoord(11,11)[1],5,0,Math.PI*2,true);
-		mycontext.fill();
-		mycontext.beginPath();
-		mycontext.arc(calCoord(7,7)[0],calCoord(7,7)[1],5,0,Math.PI*2,true);
-		mycontext.fill();
-		var array=createArray();
-		var player=1;
-
-		function getCanvasPos(canvas,e)  {//获取鼠标在canvas上的坐标  
-	        var rect = canvas.getBoundingClientRect(); 
-	        var array= new Array();
-	        array[0]=e.clientX-rect.left;
-	        array[1]=e.clientY-rect.top;
-	        return array;
-        }
-		function isFinish(){
-			//res为0时未结束，为1时黑方胜，为-1时白方胜
-			var res=0;
-			for(var i=0;i<=10;i++){
-				for(var j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]+array[i+2][j]+array[i+3][j]+array[i+4][j]==5) {
-						res=1;
-						return res;
-					}
-					if (array[i][j]+array[i+1][j]+array[i+2][j]+array[i+3][j]+array[i+4][j]==-5) {
-						res=-1;
-						return res;
-					}
-				}
-			}
-			for(var i=0;i<=14;i++){
-				for(var j=0;j<=10;j++){
-					if (array[i][j]+array[i][j+1]+array[i][j+2]+array[i][j+3]+array[i][j+4]==5) {
-						res=1;
-						return res;
-					}
-					if (array[i][j]+array[i][j+1]+array[i][j+2]+array[i][j+3]+array[i][j+4]==-5) {
-						res=-1;
-						return res;
-					}
-				}
-			}
-			for(var i=0;i<=10;i++){
-				for(var j=0;j<=10;j++){
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]+array[i+3][j+3]+array[i+4][j+4]==5) {
-						res=1;
-						return res;
-					}
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]+array[i+3][j+3]+array[i+4][j+4]==-5) {
-						res=-1;
-						return res;
-					}
-				}
-			}
-			for(var i=0;i<=10;i++){
-				for(var j=4;j<=14;j++){
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]+array[i+3][j-3]+array[i+4][j-4]==5) {
-						res=1;
-						return res;
-					}
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]+array[i+3][j-3]+array[i+4][j-4]==-5) {
-						res=-1;
-						return res;
-					}
-				}
-			}
-			return res;
-		}
-		function createArray(){
-			var array=new Array();
-			for(var i=0;i<=14;i++){
-				array[i]=new Array();
-				for(var j=0;j<=14;j++){
-					array[i][j]=0;
-				}
-			}
-			return array;
-		}
-		function calCoord(x,y){
-			var res=new Array();
-			res[0]=20+40*x;
-			res[1]=20+40*y;
-			return res;
-		}
-		function calCoord2(x,y){
-			var res=new Array();
-			res[0]=Math.round((x-20)/40.0);
-			res[1]=Math.round((y-20)/40.0);
-			return res;
-		}
-		function handleClick(e){
-
-			var coords=calCoord2(getCanvasPos(mycanvas,e)[0],getCanvasPos(mycanvas,e)[1]);
-			if(erupted(coords[0],coords[1])){
-				var aiCoords=aiDecision();
-			    erupted(aiCoords[0],aiCoords[1]);
-			}
-			
-		}
-		function aiDecision(){
-			var res=new Array();
-			res[0]=0;res[1]=0;
-			var scoreChart=createScoreChart();
-			for(var i=0;i<=14;i++){
-				for(var j=0;j<=14;j++){
-					if(scoreChart[i][j]>scoreChart[res[0]][res[1]]){
-						res[0]=i;
-						res[1]=j;
-					}
-				}
-			}
-			return res;
-		}
-		function createScoreChart(){
-			var scoreChart=createArray();
-			var scoreblack=0,scorewhite=0;
-			for(var i=0;i<=14;i++){
-				for(var j=0;j<=14;j++){
-					if (array[i][j]!=0) {
-						continue;
-					}
-					array[i][j]=1;
-					scoreblack=getScore(1);
-					array[i][j]=-1;
-					scorewhite=getScore(-1);
-					array[i][j]=0;
-					scoreChart[i][j]=Math.max(scoreblack,scorewhite);
-				}
-			}
-			return scoreChart;
-		}
-		function getScore(val){
-			//val是1时对黑方进行评估，是-1时对白方进行评估
-			if (isFinish()==val) {return 100;}//成五
-			//活四
-			if (isAliveFour(val)) {return 90;}
-			if (isDoubleDeadFour(val)) {return 90;}
-			if (isDeadFour(val)&&isAliveThree(val)) {return 90;}
-			if (isDoubleAliveThree(val)) {return 80;}
-			if (isDeadThree(val)&&isAliveThree(val)) {return 70;}
-			if (isDeadFour(val)) {return 60;}
-			if (isAliveThree(val)) {return 50;}
-			if (isDoubleAliveTwo(val)) {return 40;}
-			if (isDeadThree(val)) {return 30;}
-			if (isAliveTwo(val)) {return 20;}
-			if (isDeadTwo(val)) {return 10;}
-			return 0;
-		}
-		function isDeadTwo(val){
-			for(var i=1;i<=12;i++){
-				for(var j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]==2*val&&(array[i-1][j]==0||array[i+2][j]==0)) {
-						return true;
-					}
-				}
-			}
-			for(var j=0;j<=14;j++){
-				if (array[0][j]+array[1][j]==2*val&&array[2][j]==0) {
-					return true;
-				}
-			}
-			for(var j=0;j<=14;j++){
-				if (array[13][j]+array[14][j]==2*val&&array[12][j]==0) {
-					return true;
-				}
-			}
-			for(var i=0;i<=14;i++){
-				for(var j=1;j<=12;j++){
-					if (array[i][j]+array[i][j+1]==2*val&&(array[i][j-1]==0||array[i][j+2]==0)) {
-						return true;
-					}
-				}
-			}
-			for(var i=0;i<=14;i++){
-				if (array[i][0]+array[i][1]==2*val&&array[i][2]==0) {
-					return true;
-				}
-			}
-			for(var i=0;i<=14;i++){
-				if (array[i][13]+array[i][14]==3*val&&array[i][12]==0) {
-					return true;
-				}
-			}
-			for(var i=1;i<=12;i++){
-				for(var j=1;j<=12;j++){
-					if (array[i][j]+array[i+1][j+1]==2*val&&(array[i-1][j-1]==0||array[i+2][j+2]==0)) {
-						return true;
-					}
-					}
-			}
-			for(var j=0;j<=12;j++){
-				if (array[0][j]+array[1][j+1]==2*val&&array[2][j+2]==0) {
-					return true;}
-			}
-			for(var i=0;i<=12;i++){
-				if (array[i][0]+array[i+1][1]==2*val&&array[i+2][2]==0) {
-					return true;
-				}
-			}
-			for(var i=1;i<=13;i++){
-				if (array[i][13]+array[i+1][14]==2*val&&array[i-1][12]==0) {
-					return true;
-				}
-			}
-			for(var j=1;j<=13;j++){
-				if (array[13][j]+array[14][j+1]==2*val&&array[12][j-1]==0) {
-					return true;
-				}
-			}
-			for(var i=1;i<=12;i++){
-				for(var j=3;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]==2*val&&(array[i-1][j+1]==0||array[i+2][j-2]==0)) {
-						return true;
-					}
-					}
-			}
-			for(var j=2;j<=14;j++){
-				if (array[0][j]+array[1][j-1]==2*val&&array[2][j-2]==0) {
-					return true;
-				}
-			}
-			for(var i=1;i<=13;i++){
-				if (array[i][1]+array[i+1][0]==2*val&&array[i-1][2]==0) {
-					return true;
-				}
-			}
-			for(var j=1;j<=13;j++){
-				if (array[13][j]+array[14][j-1]==2*val&&array[12][j+1]==0) {
-					return true;
-				}
-			}
-			for(var i=0;i<=12;i++){
-				if (array[i][14]+array[i+1][13]==2*val&&array[i+2][12]==0) {
-					return true;
-				}
-			}
-			return false;
-		}
-		function isDoubleAliveTwo(val){
-			var count=0;
-			for(i=1;i<=12;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]==2*val&&array[i-1][j]==0&&array[i+2][j]==0) {
-						count++;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=12;j++){
-					if (array[i][j]+array[i][j+1]==2*val&&array[i][j-1]==0&&array[i][j+2]==0) {
-						count++;
-					}
-				}
-			}
-			for(i=1;i<=12;i++){
-				for(j=1;j<=12;j++){
-					if (array[i][j]+array[i+1][j+1]==2*val&&array[i-1][j-1]==0&&array[i+2][j+2]==0) {
-						count++;
-					}
-					}
-			}
-			for(i=1;i<=12;i++){
-				for(j=2;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]==2*val&&array[i-1][j+1]==0&&array[i+2][j-2]==0) {
-						count++;
-					}
-					}
-			}
-			if (count>=2) {return true;}
-			return false;
-		}
-		function isAliveTwo(val){
-			for(i=1;i<=12;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]==2*val&&array[i-1][j]==0&&array[i+2][j]==0) {
-						return true;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=12;j++){
-					if (array[i][j]+array[i][j+1]==2*val&&array[i][j-1]==0&&array[i][j+2]==0) {
-						return true;
-					}
-				}
-			}
-			for(i=1;i<=12;i++){
-				for(j=1;j<=12;j++){
-					if (array[i][j]+array[i+1][j+1]==2*val&&array[i-1][j-1]==0&&array[i+2][j+2]==0) {
-						return true;
-					}
-					}
-			}
-			for(i=1;i<=12;i++){
-				for(j=2;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]==2*val&&array[i-1][j+1]==0&&array[i+2][j-2]==0) {
-						return true;
-					}
-					}
-			}
-			return false;
-		}
-		function isDeadThree(val){
-			for(i=1;i<=11;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]+array[i+2][j]==3*val&&(array[i-1][j]==0||array[i+3][j]==0)) {
-						return true;
-					}
-				}
-			}
-			for(j=0;j<=14;j++){
-				if (array[0][j]+array[1][j]+array[2][j]==3*val&&array[3][j]==0) {
-					return true;
-				}
-			}
-			for(j=0;j<=14;j++){
-				if (array[12][j]+array[13][j]+array[14][j]==3*val&&array[11][j]==0) {
-					return true;
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=11;j++){
-					if (array[i][j]+array[i][j+1]+array[i][j+2]==3*val&&(array[i][j-1]==0||array[i][j+3]==0)) {
-						return true;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				if (array[i][0]+array[i][1]+array[i][2]==3*val&&array[i][3]==0) {
-					return true;
-				}
-			}
-			for(i=0;i<=14;i++){
-				if (array[i][12]+array[i][13]+array[i][14]==3*val&&array[i][11]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=11;i++){
-				for(j=1;j<=11;j++){
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]==3*val&&(array[i-1][j-1]==0||array[i+3][j+3]==0)) {
-						return true;
-					}
-					}
-			}
-			for(j=0;j<=11;j++){
-				if (array[0][j]+array[1][j+1]+array[2][j+2]==3*val&&array[3][j+3]==0) {
-					return true;}
-			}
-			for(i=0;i<=11;i++){
-				if (array[i][0]+array[i+1][1]+array[i+2][2]==3*val&&array[i+3][3]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=12;i++){
-				if (array[i][12]+array[i+1][13]+array[i+2][14]==3*val&&array[i-1][11]==0) {
-					return true;
-				}
-			}
-			for(j=1;j<=12;j++){
-				if (array[12][j]+array[13][j+1]+array[14][j+2]==3*val&&array[11][j-1]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=10;i++){
-				for(j=4;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]==3*val&&(array[i-1][j+1]==0||array[i+3][j-3]==0)) {
-						return true;
-					}
-					}
-			}
-			for(j=3;j<=14;j++){
-				if (array[0][j]+array[1][j-1]+array[2][j-2]==3*val&&array[3][j-3]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=12;i++){
-				if (array[i][2]+array[i+1][1]+array[i+2][0]==3*val&&array[i-1][3]==0) {
-					return true;
-				}
-			}
-			for(j=2;j<=13;j++){
-				if (array[12][j]+array[13][j-1]+array[14][j-2]==3*val&&array[11][j+1]==0) {
-					return true;
-				}
-			}
-			for(i=0;i<=11;i++){
-				if (array[i][14]+array[i+1][13]+array[i+2][12]==3*val&&array[i+3][11]==0) {
-					return true;
-				}
-			}
-			return false;
-		}
-		function isDoubleAliveThree(val){
-			var count=0;
-			for(i=1;i<=11;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]+array[i+2][j]==3*val&&array[i-1][j]==0&&array[i+3][j]==0) {
-						count++;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=11;j++){
-					if (array[i][j]+array[i][j+1]+array[i][j+2]==3*val&&array[i][j-1]==0&&array[i][j+3]==0) {
-						count++;
-					}
-				}
-			}
-			for(i=1;i<=11;i++){
-				for(j=1;j<=11;j++){
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]==3*val&&array[i-1][j-1]==0&&array[i+3][j+3]==0) {
-						count++;
-					}
-					}
-			}
-			for(i=1;i<=11;i++){
-				for(j=3;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]==3*val&&array[i-1][j+1]==0&&array[i+3][j-3]==0) {
-						count++;
-					}
-					}
-			}
-			if (count>=2) {return true;}
-			return false;
-		}
-		function isAliveThree(val){
-			for(i=1;i<=11;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]+array[i+2][j]==3*val&&array[i-1][j]==0&&array[i+3][j]==0) {
-						return true;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=11;j++){
-					if (array[i][j]+array[i][j+1]+array[i][j+2]==3*val&&array[i][j-1]==0&&array[i][j+3]==0) {
-						return true;
-					}
-				}
-			}
-			for(i=1;i<=11;i++){
-				for(j=1;j<=11;j++){
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]==3*val&&array[i-1][j-1]==0&&array[i+3][j+3]==0) {
-						return true;
-					}
-					}
-			}
-			for(i=1;i<=11;i++){
-				for(j=3;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]==3*val&&array[i-1][j+1]==0&&array[i+3][j-3]==0) {
-						return true;
-					}
-					}
-			}
-			return false;
-		}
-		function isDoubleDeadFour(val){
-			var count=0;
-			for(i=1;i<=10;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]+array[i+2][j]+array[i+3][j]==4*val&&(array[i-1][j]==0||array[i+4][j]==0)) {
-						count++;
-					}
-				}
-			}
-			for(j=0;j<=14;j++){
-				if (array[0][j]+array[1][j]+array[2][j]+array[3][j]==4*val&&array[4][j]==0) {
-					count++;
-				}
-			}
-			for(j=0;j<=14;j++){
-				if (array[11][j]+array[12][j]+array[13][j]+array[14][j]==4*val&&array[10][j]==0) {
-					count++;
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=10;j++){
-					if (array[i][j]+array[i][j+1]+array[i][j+2]+array[i][j+3]==4*val&&(array[i][j-1]==0||array[i][j+4]==0)) {
-						count++;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				if (array[i][0]+array[i][1]+array[i][2]+array[i][3]==4*val&&array[i][4]==0) {
-					count++;
-				}
-			}
-			for(i=0;i<=14;i++){
-				if (array[i][11]+array[i][12]+array[i][13]+array[i][14]==4*val&&array[i][10]==0) {
-					count++;
-				}
-			}
-			for(i=1;i<=10;i++){
-				for(j=1;j<=10;j++){
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]+array[i+3][j+3]==4*val&&(array[i-1][j-1]==0||array[i+4][j+4]==0)) {
-						count++;
-					}
-					}
-			}
-			for(j=0;j<=10;j++){
-				if (array[0][j]+array[1][j+1]+array[2][j+2]+array[3][j+3]==4*val&&array[4][j+4]==0) {
-					count++;}
-			}
-			for(i=0;i<=10;i++){
-				if (array[i][0]+array[i+1][1]+array[i+2][2]+array[i+3][3]==4*val&&array[i+4][4]==0) {
-					count++;
-				}
-			}
-			for(i=1;i<=11;i++){
-				if (array[i][11]+array[i+1][12]+array[i+2][13]+array[i+3][14]==4*val&&array[i-1][10]==0) {
-					count++;
-				}
-			}
-			for(j=1;j<=11;j++){
-				if (array[11][j]+array[12][j+1]+array[13][j+2]+array[14][j+3]==4*val&&array[10][j-1]==0) {
-					count++;
-				}
-			}
-			for(i=1;i<=10;i++){
-				for(j=4;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]+array[i+3][j-3]==4*val&&(array[i-1][j+1]==0||array[i+4][j-4]==0)) {
-						count++;
-					}
-					}
-			}
-			for(j=4;j<=14;j++){
-				if (array[0][j]+array[1][j-1]+array[2][j-2]+array[3][j-3]==4*val&&array[4][j-4]==0) {
-					count++;
-				}
-			}
-			for(i=1;i<=11;i++){
-				if (array[i][3]+array[i+1][2]+array[i+2][1]+array[i+3][0]==4*val&&array[i-1][4]==0) {
-					count++;
-				}
-			}
-			for(j=3;j<=13;j++){
-				if (array[11][j]+array[12][j-1]+array[13][j-2]+array[14][j-3]==4*val&&array[10][j+1]==0) {
-					count++;
-				}
-			}
-			for(i=0;i<=10;i++){
-				if (array[i][14]+array[i+1][13]+array[i+2][12]+array[i+3][11]==4*val&&array[i+4][10]==0) {
-					count++;
-				}
-			}
-			if (count>=2) {return true;}
-			return false;
-		}
-		function isDeadFour(val){
-			for(i=1;i<=10;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]+array[i+2][j]+array[i+3][j]==4*val&&(array[i-1][j]==0||array[i+4][j]==0)) {
-						return true;
-					}
-				}
-			}
-			for(j=0;j<=14;j++){
-				if (array[0][j]+array[1][j]+array[2][j]+array[3][j]==4*val&&array[4][j]==0) {
-					return true;
-				}
-			}
-			for(j=0;j<=14;j++){
-				if (array[11][j]+array[12][j]+array[13][j]+array[14][j]==4*val&&array[10][j]==0) {
-					return true;
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=10;j++){
-					if (array[i][j]+array[i][j+1]+array[i][j+2]+array[i][j+3]==4*val&&(array[i][j-1]==0||array[i][j+4]==0)) {
-						return true;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				if (array[i][0]+array[i][1]+array[i][2]+array[i][3]==4*val&&array[i][4]==0) {
-					return true;
-				}
-			}
-			for(i=0;i<=14;i++){
-				if (array[i][11]+array[i][12]+array[i][13]+array[i][14]==4*val&&array[i][10]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=10;i++){
-				for(j=1;j<=10;j++){
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]+array[i+3][j+3]==4*val&&(array[i-1][j-1]==0||array[i+4][j+4]==0)) {
-						return true;
-					}
-					}
-			}
-			for(j=0;j<=10;j++){
-				if (array[0][j]+array[1][j+1]+array[2][j+2]+array[3][j+3]==4*val&&array[4][j+4]==0) {
-					return true;}
-			}
-			for(i=0;i<=10;i++){
-				if (array[i][0]+array[i+1][1]+array[i+2][2]+array[i+3][3]==4*val&&array[i+4][4]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=11;i++){
-				if (array[i][11]+array[i+1][12]+array[i+2][13]+array[i+3][14]==4*val&&array[i-1][10]==0) {
-					return true;
-				}
-			}
-			for(j=1;j<=11;j++){
-				if (array[11][j]+array[12][j+1]+array[13][j+2]+array[14][j+3]==4*val&&array[10][j-1]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=10;i++){
-				for(j=4;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]+array[i+3][j-3]==4*val&&(array[i-1][j+1]==0||array[i+4][j-4]==0)) {
-						return true;
-					}
-					}
-			}
-			for(j=4;j<=14;j++){
-				if (array[0][j]+array[1][j-1]+array[2][j-2]+array[3][j-3]==4*val&&array[4][j-4]==0) {
-					return true;
-				}
-			}
-			for(i=1;i<=11;i++){
-				if (array[i][3]+array[i+1][2]+array[i+2][1]+array[i+3][0]==4*val&&array[i-1][4]==0) {
-					return true;
-				}
-			}
-			for(j=3;j<=13;j++){
-				if (array[11][j]+array[12][j-1]+array[13][j-2]+array[14][j-3]==4*val&&array[10][j+1]==0) {
-					return true;
-				}
-			}
-			for(i=0;i<=10;i++){
-				if (array[i][14]+array[i+1][13]+array[i+2][12]+array[i+3][11]==4*val&&array[i+4][10]==0) {
-					return true;
-				}
-			}
-			return false;
-		}
-		function isAliveFour(val){
-			for(i=1;i<=10;i++){
-				for(j=0;j<=14;j++){
-					if (array[i][j]+array[i+1][j]+array[i+2][j]+array[i+3][j]==4*val&&array[i-1][j]==0&&array[i+4][j]==0) {
-						return true;
-					}
-				}
-			}
-			for(i=0;i<=14;i++){
-				for(j=1;j<=10;j++){
-					if (array[i][j]+array[i][j+1]+array[i][j+2]+array[i][j+3]==4*val&&array[i][j-1]==0&&array[i][j+4]==0) {
-						return true;
-					}
-				}
-			}
-			for(i=1;i<=10;i++){
-				for(j=1;j<=10;j++){
-					if (array[i][j]+array[i+1][j+1]+array[i+2][j+2]+array[i+3][j+3]==4*val&&array[i-1][j-1]==0&&array[i+4][j+4]==0) {
-						return true;
-					}
-					}
-			}
-			for(i=1;i<=10;i++){
-				for(j=4;j<=13;j++){
-					if (array[i][j]+array[i+1][j-1]+array[i+2][j-2]+array[i+3][j-3]==4*val&&array[i-1][j+1]==0&&array[i+4][j-4]==0) {
-						return true;
-					}
-					}
-			}
-			return false;
-		}
-		function erupted(x,y){
-			var coords=calCoord(x,y);
-			if (isFinish()!=0) {
-				return false;
-			}
-			if (array[x][y]!=0) {
-				document.getElementById("prompt").innerHTML+="  该处已有棋子";
-				return false;
-			}
-			if (player==1) {
-				mycontext.fillStyle="#000000";
-				document.getElementById("prompt").innerHTML="轮到白方下子 WHITE";
-				player=-1;
-				array[x][y]=1;
-			}else {
-				mycontext.fillStyle="#FFFFFF";
-				document.getElementById("prompt").innerHTML="轮到黑方下子 BLACK";
-				player=1;
-				array[x][y]=-1;
-			}
-			mycontext.beginPath();
-		    mycontext.arc(coords[0],coords[1],19,0,Math.PI*2,true);
-		    mycontext.fill();
-		    var res=isFinish();
-		    if (res!=0) {
-				if (res==1) {
-					document.getElementById("result").innerHTML="黑方获胜，游戏结束";
-				}else if (res==-1) {
-					document.getElementById("result").innerHTML="白方获胜，游戏结束";
-				}
-			}
-			return true;
-		}
-	</script>
-</body>
-</html>
+                <h1 id="1-实模式与保护模式"><a href="#1-实模式与保护模式" class="headerlink" title="1. 实模式与保护模式"></a>1. 实模式与保护模式</h1><h2 id="实模式"><a href="#实模式" class="headerlink" title="实模式"></a>实模式</h2><p>基址加偏移量就可以直接拿到物理地址的模式</p>
+<p><strong>缺点：</strong>不安全</p>
+<h2 id="保护模式"><a href="#保护模式" class="headerlink" title="保护模式"></a>保护模式</h2><p>不能直接拿到物理地址，需要进行地址转换，是现代操作系统的主要模式。</p>
+<h2 id="选择子"><a href="#选择子" class="headerlink" title="选择子"></a>选择子</h2><p>放在段选择寄存器里，16位，包含请求特权级，是GDT还是LDT，以及<strong>描述符表中的偏移</strong></p>
+<h2 id="描述符"><a href="#描述符" class="headerlink" title="描述符"></a>描述符</h2><p>描述各种数据段包含<strong>段基址</strong></p>
+<h2 id="GDT"><a href="#GDT" class="headerlink" title="GDT"></a>GDT</h2><p>全局描述符表，全局唯一，存放公用的描述符</p>
+<h2 id="LDT"><a href="#LDT" class="headerlink" title="LDT"></a>LDT</h2><p>局部描述符表，每个进程有一个，存放本进程使用的描述符</p>
+<h2 id="GDTR"><a href="#GDTR" class="headerlink" title="GDTR"></a>GDTR</h2><p>放置GDT首地址，限长</p>
+<h2 id="LDTR"><a href="#LDTR" class="headerlink" title="LDTR"></a>LDTR</h2><p>放置一个特殊的选择子，用于查找当前进程的LDT首地址。</p>
+<h2 id="GDT查找物理地址步骤"><a href="#GDT查找物理地址步骤" class="headerlink" title="GDT查找物理地址步骤"></a>GDT查找物理地址步骤</h2><ol>
+<li>给出段选择子（放在段选择寄存器里）+偏移量</li>
+<li>若选择GDT方式，则从GDTR获取GDT首地址，用段选择子中13位做偏移，拿到描述符</li>
+<li>如果合法且有权限，描述符中段基址加上1中的偏移量，即物理地址</li>
+</ol>
+<h2 id="LDT查找物理地址步骤"><a href="#LDT查找物理地址步骤" class="headerlink" title="LDT查找物理地址步骤"></a>LDT查找物理地址步骤</h2><ol>
+<li>给出段选择子（放在段选择寄存器里）+偏移量</li>
+<li>若选择LDT方式，则从GDTR获取GDT首地址，用LDTR中的偏移量做偏移，拿到GDT中的一个描述符</li>
+<li>从该描述符中获取LDT首地址，用段选择子中的13位做偏移，拿到LDT中的描述符</li>
+<li>如果合法且有权限，将该描述符中的段基址加上1中的偏移量即找到物理地址</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上的一些概念和寻址步骤还是有点小绕的。</p>
+<p>跳出细节来说，两种模式都可以说是基址加偏移量，程序代码中的地址均是逻辑地址即偏移量。</p>
+<p>区别在于实模式中在加载进CPU时即进行地址转换，由CPU使用的地址就是物理地址；而保护模式中，CPU使用逻辑地址，地址转换中的这个所谓基址要到描述符表中去找，而这个描述符表是不能有程序随意修改的，是由系统内核统一分配的，比如给每个程序分配不同的一块内存区域。这样就能控制程序所访问的内存空间一定是操作系统分配给自己的。</p>
+<p>而在这个寻址过程中，选择子的作用主要是在描述符表里找到描述符，GDTR、LDTR的作用是找到描述符表的起始位置，而描述符里边就存有基址和界限之类的东西。</p>
+<h1 id="2-FAT12-文件系统"><a href="#2-FAT12-文件系统" class="headerlink" title="2. FAT12 文件系统"></a>2. FAT12 文件系统</h1><ol>
+<li>数据区第一个簇号是2。原因是fat表项要与数据区的簇对应起来。而FAT0号表项与1号表项有特殊用途。0号表项存储分区所在的介质类型，1号表项存储文件系统脏位，表名文件系统存在错误。为了形成映射，数据区就从2号簇开始</li>
+<li>根目录区大小不一定，因为一个目录表项32位，而表项个数是不一定的</li>
+<li>BPB指定字段的含义<ul>
+<li>BPB_BytsPerSec;    //每扇区字节数</li>
+<li>BPB_SecPerClus;    //每簇扇区数</li>
+<li>BPB_RsvdSecCnt;    //Boot记录占用的扇区数</li>
+<li>BPB_NumFATs;    //FAT表个数，默认为2</li>
+<li>BPB_RootEntCnt;    //根目录文件数</li>
+<li>BPB_TotSec16;</li>
+<li>BPB_Media;</li>
+<li>BPB_FATSz16;    //每个FAT占用的扇区数</li>
+<li>BPB_SecPerTrk;</li>
+<li>BPB_NumHeads;</li>
+<li>BPB_HiddSec;</li>
+<li>BPB_TotSec32;    //如果BPB_FATSz16为0，此值为FAT扇区数</li>
+</ul>
+</li>
+</ol>
+<h1 id="3-程序的编译、链接"><a href="#3-程序的编译、链接" class="headerlink" title="3.  程序的编译、链接"></a>3.  程序的编译、链接</h1><h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h2><p>静态链接就是在编译链接时直接将需要的执行代码拷贝到调用处。使用静态链接生成的可执行文件体积较大，包含相同的公共代码，造成浪费。</p>
+<h2 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h2><p>在链接时仅加入描述信息，而程序执行时再从系统中把相应动态库加载到内存中去。</p>
+<h2 id="linux下，ELF可执行文件默认从地址0x080480000开始分配"><a href="#linux下，ELF可执行文件默认从地址0x080480000开始分配" class="headerlink" title="linux下，ELF可执行文件默认从地址0x080480000开始分配"></a>linux下，ELF可执行文件默认从地址0x080480000开始分配</h2>
             </div>
             <hr/>
 
@@ -1208,7 +525,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://waterxjw.github.io/others/index.html">http://waterxjw.github.io/others/index.html</a>
+                    <a href="http://waterxjw.github.io/2019/11/11/shi-yan-er-wen-ti-qing-dan/">http://waterxjw.github.io/2019/11/11/shi-yan-er-wen-ti-qing-dan/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1414,7 +731,7 @@
         repo: 'waterxjw.github.io',
         owner: 'waterxjw',
         admin: "waterxjw",
-        id: '2019-01-12T10-23-44',
+        id: '2019-11-11T20-18-15',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1440,44 +757,36 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/others/index.html">
+                <a href="/2019/11/11/shi-yan-er-wen-ti-qing-dan/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="操作系统实验二问题清单">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">操作系统实验二问题清单</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
-
-
-	五子棋
-	 
-
-
-	
-
-
-轮到黑方下子 BLACK
-
-
-
-		var mycanvas=document.getElementById("mycanvas");
-		var mycontext=mycanvas.getContext
+                            1. 实模式与保护模式实模式基址加偏移量就可以直接拿到物理地址的模式
+缺点：不安全
+保护模式不能直接拿到物理地址，需要进行地址转换，是现代操作系统的主要模式。
+选择子放在段选择寄存器里，16位，包含请求特权级，是GDT还是LDT，以及描述符
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-01-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-11-11
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            雯雯
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -1490,52 +799,46 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/others/index.html">
+                <a href="/2019/11/11/guan-yu-bo-ke/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="关于博客">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">关于博客</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            关于博客
+笔记
+备忘
+踩坑
+瞎逼逼
 
-
-	五子棋
-	 
-
-
-	
-
-
-轮到黑方下子 BLACK
-
-
-
-		var mycanvas=document.getElementById("mycanvas");
-		var mycontext=mycanvas.getContext
+一条懒狗的挣扎
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-01-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-11-11
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            雯雯
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%9E%8E%E9%80%BC%E9%80%BC/" class="post-category">
+                                    瞎逼逼
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
